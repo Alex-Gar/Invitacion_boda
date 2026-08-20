@@ -1,0 +1,765 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Raymundo &amp; Emilia</title>
+<meta name="description" content="Invitación de boda de Raymundo y Emilia — 26 y 27 de diciembre de 2026.">
+<meta name="theme-color" content="#f7f5f0">
+<style>
+__FONTS_CSS__
+
+/* ============================================================
+   DESIGN TOKENS — identidad blanco y negro, editorial, elegante
+   ============================================================ */
+:root{
+  --paper: #f8f6f1;
+  --paper-2: #efebe1;
+  --paper-3: #e7e2d5;
+  --ink: #15130f;
+  --ink-soft: #4a453c;
+  --ink-faint: #837c6d;
+  --line: rgba(21,19,15,.16);
+  --line-strong: rgba(21,19,15,.55);
+  --white: #fffdf9;
+
+  --serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --script: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Jost', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --container: 640px;
+  --edge: clamp(24px, 7vw, 64px);
+
+  --ease: cubic-bezier(.22,.68,.24,1);
+  --dur-s: .5s;
+  --dur-m: .9s;
+  --dur-l: 1.4s;
+}
+
+*,*::before,*::after{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior: auto; }
+  *,*::before,*::after{ animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+body{
+  margin:0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-weight: 300;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img{ max-width:100%; display:block; }
+a{ color: inherit; }
+button{ font-family: inherit; }
+
+h1,h2,h3{ font-family: var(--serif); font-weight: 500; margin:0; color: var(--ink); }
+
+.eyebrow{
+  font-family: var(--sans);
+  font-size: 11.5px;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 400;
+}
+
+.section{
+  position: relative;
+  padding: clamp(72px,14vw,140px) var(--edge) clamp(64px,12vw,120px);
+  max-width: var(--container);
+  margin: 0 auto;
+}
+.section-wide{ max-width: 1040px; }
+
+/* ---------- divider ornament ---------- */
+.divider{ display:flex; align-items:center; justify-content:center; gap:14px; margin: 22px auto; width: 100%; max-width: 220px; }
+.divider .l{ flex:1; height:1px; background: var(--line-strong); }
+.divider .d{ width:6px; height:6px; border:1px solid var(--line-strong); transform: rotate(45deg); flex:0 0 auto; }
+
+/* ---------- reveal animation ---------- */
+.reveal{ opacity:0; transform: translateY(28px); transition: opacity var(--dur-m) var(--ease), transform var(--dur-m) var(--ease); }
+.reveal.is-visible{ opacity:1; transform: translateY(0); }
+.reveal-stagger > *{ transition-delay: calc(var(--i,0) * 110ms); }
+
+/* ============================================================
+   PROGRESS BAR
+   ============================================================ */
+.progress{
+  position: fixed; top:0; left:0; height:2px; width:100%;
+  background: transparent; z-index: 60; pointer-events:none;
+}
+.progress__bar{ height:100%; width:0%; background: var(--ink); opacity:.55; transition: width .1s linear; }
+
+/* ============================================================
+   SOBRE / ENVELOPE (pantalla de apertura)
+   ============================================================ */
+.envelope{
+  position: fixed; inset:0; z-index: 100;
+  background: var(--paper);
+  display:flex; align-items:center; justify-content:center;
+  transition: opacity 1.1s var(--ease), visibility 1.1s var(--ease);
+}
+.envelope::before{
+  content:""; position:absolute; inset: 16px;
+  border: 1px solid var(--line);
+  pointer-events:none;
+}
+.envelope.is-closed{ opacity:0; visibility:hidden; }
+.envelope__inner{ text-align:center; padding: 24px; max-width: 380px; }
+.envelope__mono{
+  font-family: var(--serif); font-style: italic; font-weight: 500;
+  font-size: clamp(46px,14vw,64px); letter-spacing: .04em; color: var(--ink);
+  opacity:0; animation: fadeUp 1.3s var(--ease) .2s forwards;
+}
+.envelope__mono span{ font-size: .5em; vertical-align: middle; padding: 0 .18em; color: var(--ink-faint); font-style: normal;}
+.envelope__tag{
+  margin-top: 18px; font-size: 12px; letter-spacing:.28em; text-transform: uppercase;
+  color: var(--ink-soft); opacity:0; animation: fadeUp 1.3s var(--ease) .5s forwards;
+}
+.envelope__names{
+  margin-top: 26px; font-family: var(--sans); font-size: 13px; letter-spacing:.08em; color: var(--ink-faint);
+  opacity:0; animation: fadeUp 1.3s var(--ease) .75s forwards;
+}
+.envelope__btn{
+  margin-top: 40px; opacity:0; animation: fadeUp 1.3s var(--ease) 1s forwards;
+}
+@keyframes fadeUp{ from{ opacity:0; transform: translateY(14px);} to{ opacity:1; transform: translateY(0);} }
+
+.btn{
+  appearance:none; border:1px solid var(--ink); background: transparent; color: var(--ink);
+  font-family: var(--sans); font-size: 11.5px; letter-spacing:.26em; text-transform: uppercase;
+  padding: 16px 34px; cursor:pointer; transition: background var(--dur-s) var(--ease), color var(--dur-s) var(--ease);
+}
+.btn:hover{ background: var(--ink); color: var(--paper); }
+.btn--solid{ background: var(--ink); color: var(--paper); }
+.btn--solid:hover{ background: transparent; color: var(--ink); }
+
+/* ============================================================
+   MUSIC TOGGLE
+   ============================================================ */
+.music-toggle{
+  position: fixed; right: clamp(16px,4vw,28px); bottom: clamp(16px,4vw,28px); z-index: 70;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--paper); border: 1px solid var(--line-strong);
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  box-shadow: 0 4px 18px rgba(21,19,15,.10);
+  transition: transform .4s var(--ease), opacity .6s var(--ease), background .3s;
+  opacity: 0; transform: scale(.8); pointer-events:none;
+}
+body.opened .music-toggle{ opacity:1; transform: scale(1); pointer-events:auto; }
+.music-toggle:hover{ background: var(--ink); }
+.music-toggle:hover .bars i{ background: var(--paper); }
+.bars{ display:flex; align-items:flex-end; gap:3px; height:16px; }
+.bars i{ display:block; width:2.5px; background: var(--ink); border-radius:1px; height:6px; transition: background .3s; }
+body.music-on .bars i{ animation: eq 1s ease-in-out infinite; }
+.bars i:nth-child(1){ animation-delay: -.6s; }
+.bars i:nth-child(2){ animation-delay: -.2s; }
+.bars i:nth-child(3){ animation-delay: -.9s; }
+.bars i:nth-child(4){ animation-delay: -.4s; }
+@keyframes eq{ 0%,100%{ height:5px;} 50%{ height:16px;} }
+body:not(.music-on) .bars i{ height: 5px; }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{
+  position: relative; min-height: 100svh; width:100%;
+  display:flex; flex-direction: column; align-items:center; justify-content: flex-end;
+  overflow:hidden; background: var(--ink);
+}
+.hero__media{ position:absolute; inset:0; overflow:hidden; }
+.hero__media img{
+  width:100%; height:100%; object-fit:cover; object-position: 50% 18%;
+  transform: scale(1.08); filter: saturate(1);
+  transition: transform 3.5s var(--ease);
+}
+body.opened .hero__media img{ transform: scale(1); }
+.hero__scrim{
+  position:absolute; inset:0;
+  background: linear-gradient(to bottom,
+    rgba(10,9,7,.16) 0%,
+    rgba(10,9,7,.04) 22%,
+    rgba(10,9,7,.10) 46%,
+    rgba(10,9,7,.46) 68%,
+    rgba(10,9,7,.72) 86%,
+    rgba(10,9,7,.84) 100%);
+}
+.hero__content{
+  position: relative; z-index: 2; color: var(--white); text-align:center;
+  padding: 0 24px clamp(48px,10vw,88px); width:100%; max-width: 620px;
+}
+.hero__eyebrow{
+  font-size: 11px; letter-spacing:.34em; text-transform:uppercase; color: rgba(255,253,249,.86);
+  opacity:0; transform: translateY(16px); animation: heroIn 1.2s var(--ease) 2.4s forwards;
+}
+.hero__names{
+  font-family: var(--serif); font-weight: 500; line-height: 1.05; color: var(--white);
+  font-size: clamp(36px, 10vw, 66px); margin: 14px 0 6px;
+  opacity:0; transform: translateY(20px); animation: heroIn 1.3s var(--ease) 2.65s forwards;
+}
+.hero__amp{ display:block; font-style: italic; font-family: var(--script); font-size: .5em; margin: 6px 0; color: rgba(255,253,249,.78); }
+.hero__date{
+  font-size: 13px; letter-spacing:.3em; text-transform: uppercase; color: rgba(255,253,249,.9);
+  opacity:0; transform: translateY(16px); animation: heroIn 1.2s var(--ease) 2.9s forwards;
+}
+.hero__phrase{
+  margin-top: 22px; font-family: var(--script); font-style: italic; font-size: clamp(16px,3.6vw,20px);
+  color: rgba(255,253,249,.86);
+  opacity:0; transform: translateY(16px); animation: heroIn 1.2s var(--ease) 3.15s forwards;
+}
+@keyframes heroIn{ to{ opacity:1; transform: translateY(0);} }
+
+.scrollcue{
+  position: relative; z-index:2; margin-bottom: clamp(20px,4vw,32px);
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  color: rgba(255,253,249,.75);
+  opacity:0; animation: heroIn 1.2s var(--ease) 3.4s forwards;
+}
+.scrollcue span{ font-size:10px; letter-spacing:.28em; text-transform:uppercase; }
+.scrollcue .line{ width:1px; height:34px; background: rgba(255,253,249,.5); overflow:hidden; position:relative; }
+.scrollcue .line::after{ content:""; position:absolute; top:-100%; left:0; width:100%; height:100%; background: var(--white); animation: cueMove 2.2s ease-in-out infinite; }
+@keyframes cueMove{ 0%{ top:-100%;} 60%{ top:100%;} 100%{ top:100%;} }
+
+/* ============================================================
+   INTRO QUOTE
+   ============================================================ */
+.intro{ text-align:center; }
+.intro__quote{
+  font-family: var(--serif); font-style: italic; font-weight: 400;
+  font-size: clamp(22px, 4.6vw, 32px); line-height:1.55; color: var(--ink);
+}
+.intro__sign{ margin-top: 26px; font-family: var(--script); font-style: italic; font-size: 20px; color: var(--ink-soft); }
+
+/* ============================================================
+   HISTORIA
+   ============================================================ */
+.historia{ }
+.historia__grid{ display:grid; grid-template-columns: 1fr; gap: 40px; align-items:center; }
+.historia__media{ overflow:hidden; }
+.historia__media img{ width:100%; height:auto; filter: grayscale(1) contrast(1.02); }
+.historia h2{ font-size: clamp(30px,6vw,42px); margin-bottom: 18px; }
+.historia p{ color: var(--ink-soft); font-size: 15.5px; margin: 0 0 16px; }
+.historia p:last-child{ margin-bottom:0; }
+.historia strong{ color: var(--ink); font-weight:500; }
+
+/* ============================================================
+   COUNTDOWN
+   ============================================================ */
+.countdown{ text-align:center; background: var(--ink); color: var(--paper); padding: clamp(64px,12vw,110px) var(--edge); }
+.countdown .eyebrow{ color: rgba(248,246,241,.65); }
+.countdown h2{ color: var(--paper); font-size: clamp(28px,5.6vw,38px); margin: 10px 0 40px; }
+.countdown__grid{ display:grid; grid-template-columns: repeat(4,1fr); gap: clamp(10px,3vw,28px); max-width: 480px; margin: 0 auto; }
+.countdown__num{ font-family: var(--serif); font-size: clamp(32px,8vw,54px); font-weight:500; font-variant-numeric: tabular-nums; }
+.countdown__label{ margin-top:8px; font-size:10px; letter-spacing:.22em; text-transform:uppercase; color: rgba(248,246,241,.6); }
+.countdown__sep{ display:none; }
+
+/* ============================================================
+   EVENTOS (ceremonia / recepción / baile)
+   ============================================================ */
+.evento{ }
+.evento__item{ text-align:center; padding: 46px 0; border-bottom: 1px solid var(--line); }
+.evento__item:last-child{ border-bottom:none; }
+.evento__icon{ width:34px; height:34px; margin: 0 auto 18px; color: var(--ink); }
+.evento__day{ font-size: 11px; letter-spacing:.28em; text-transform:uppercase; color: var(--ink-faint); }
+.evento__title{ font-size: clamp(24px,5vw,30px); margin: 8px 0 4px; }
+.evento__time{ font-family: var(--script); font-style:italic; font-size: 20px; color: var(--ink-soft); }
+.evento__place{ margin-top: 6px; font-size: 13px; letter-spacing:.05em; text-transform:uppercase; color: var(--ink); }
+.evento__desc{ max-width: 440px; margin: 16px auto 0; font-size: 14.5px; color: var(--ink-soft); }
+
+/* ============================================================
+   UBICACION
+   ============================================================ */
+.lugares{ display:grid; grid-template-columns: 1fr; gap: 26px; margin-top: 30px; }
+.lugar{ border: 1px solid var(--line); padding: 30px 26px; text-align:center; }
+.lugar h3{ font-size: 21px; margin-bottom: 6px; }
+.lugar p{ color: var(--ink-soft); font-size: 13.5px; margin: 0 0 18px; letter-spacing:.02em; }
+.lugar .btn{ font-size: 10.5px; padding: 13px 26px; }
+
+/* ============================================================
+   DRESS CODE
+   ============================================================ */
+.dresscode{ text-align:center; }
+.dresscode__icon{ width: 40px; height:40px; margin: 0 auto 20px; }
+.dresscode__code{ font-family: var(--serif); font-style: italic; font-size: clamp(26px,5.6vw,34px); margin: 6px 0 18px; }
+.dresscode__note{ color: var(--ink-soft); font-size: 14px; max-width: 440px; margin: 0 auto; }
+.dresscode__row{ display:flex; gap: 34px; justify-content:center; margin-top: 30px; flex-wrap:wrap; }
+.dresscode__col{ font-size: 11px; letter-spacing:.18em; text-transform:uppercase; color: var(--ink-faint); }
+.dresscode__col b{ display:block; font-family: var(--serif); font-style:italic; font-size:16px; letter-spacing:0; text-transform:none; color: var(--ink); margin-top:4px; font-weight:500;}
+
+/* ============================================================
+   REFLEXION (bloques poéticos)
+   ============================================================ */
+.reflexion{ text-align:center; background: var(--paper-2); }
+.reflexion h2{ font-size: clamp(24px,5vw,32px); margin-bottom: 20px; }
+.reflexion p{ color: var(--ink-soft); font-size: 15px; max-width: 480px; margin: 0 auto 14px; }
+.reflexion p:last-of-type{ margin-bottom:0; }
+
+/* ============================================================
+   GALERIA
+   ============================================================ */
+.galeria__grid{ display:grid; grid-template-columns: 1fr; gap: 14px; }
+.galeria__grid img{ width:100%; height:100%; object-fit:cover; filter: grayscale(1); }
+.galeria__big{ grid-column: span 1; aspect-ratio: 3/4; overflow:hidden; }
+.galeria__row{ display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
+.galeria__row .ph{ aspect-ratio: 1/1; overflow:hidden; }
+.galeria figure{ margin:0; overflow:hidden; }
+.galeria__cap{ text-align:center; margin-top: 24px; font-family: var(--script); font-style:italic; color: var(--ink-soft); font-size: 16px; }
+
+/* ============================================================
+   RSVP
+   ============================================================ */
+.rsvp{ text-align:center; }
+.rsvp h2{ font-size: clamp(28px,6vw,38px); }
+.rsvp__text{ color: var(--ink-soft); font-size: 15px; max-width: 440px; margin: 14px auto 34px; }
+.form{ text-align:left; display:grid; gap: 20px; }
+.field{ display:grid; gap:8px; }
+.field label{ font-size: 10.5px; letter-spacing:.2em; text-transform:uppercase; color: var(--ink-faint); }
+.field input, .field textarea{
+  border:none; border-bottom: 1px solid var(--line-strong); background: transparent;
+  font-family: var(--sans); font-size: 15px; color: var(--ink); padding: 10px 2px;
+  outline:none; transition: border-color .3s;
+}
+.field input:focus, .field textarea:focus{ border-color: var(--ink); }
+.radiorow{ display:flex; gap: 26px; }
+.radiorow label{ display:flex; align-items:center; gap:8px; font-size:13.5px; color: var(--ink); text-transform:none; letter-spacing:0; }
+.radiorow input{ accent-color: var(--ink); width:15px; height:15px; }
+.form__submit{ margin-top:6px; width:100%; }
+.rsvp__note{ margin-top:18px; font-size:12.5px; color: var(--ink-faint); text-align:center; min-height: 18px; }
+
+/* ============================================================
+   REGALOS
+   ============================================================ */
+.regalos{ text-align:center; }
+.regalos p{ color: var(--ink-soft); font-size: 14.5px; max-width: 420px; margin: 14px auto 30px; }
+.regalos__row{ display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+
+/* ============================================================
+   CIERRE + FOOTER
+   ============================================================ */
+.cierre{ text-align:center; background: var(--ink); color: var(--paper); }
+.cierre .eyebrow{ color: rgba(248,246,241,.6); }
+.cierre p{ color: rgba(248,246,241,.82); font-size: 15px; max-width: 460px; margin: 16px auto 0; }
+
+footer{ text-align:center; padding: 56px var(--edge) 90px; }
+.footer__names{ font-family: var(--serif); font-style: italic; font-size: clamp(26px,6vw,36px); }
+.footer__date{ margin-top:8px; font-size: 11px; letter-spacing:.28em; text-transform:uppercase; color: var(--ink-faint); }
+.footer__thanks{ margin-top: 22px; font-size: 13.5px; color: var(--ink-soft); }
+.footer__credit{ margin-top: 40px; font-size: 10px; color: var(--ink-faint); letter-spacing:.08em; }
+
+/* ============================================================
+   RESPONSIVE — tablet / desktop
+   ============================================================ */
+@media (min-width: 720px){
+  .historia__grid{ grid-template-columns: .85fr 1fr; gap: 64px; text-align:left; }
+  .historia{ max-width: 980px; }
+  .lugares{ grid-template-columns: 1fr 1fr; }
+  .dresscode{ }
+  .galeria{ max-width: 980px; }
+  .galeria__grid{ grid-template-columns: 1.1fr .9fr; align-items:stretch; }
+  .galeria__row{ grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 1024px){
+  .countdown__grid{ max-width: 560px; }
+  .hero__names{ font-size: clamp(56px,7vw,88px); }
+  /* En pantallas anchas y bajas, una foto vertical a pantalla completa se recorta
+     demasiado (zoom excesivo en los rostros). La enmarcamos en una columna central
+     tipo póster editorial, con el fondo oscuro haciendo de "passe-partout". */
+  .hero__media{ max-width: 720px; left:50%; transform: translateX(-50%); }
+}
+</style>
+</head>
+<body>
+
+<div class="progress"><div class="progress__bar" id="progressBar"></div></div>
+
+<!-- ============================================================
+     SOBRE — pantalla de apertura
+     ============================================================ -->
+<div class="envelope" id="envelope">
+  <div class="envelope__inner">
+    <div class="envelope__mono">R <span>&amp;</span> E</div>
+    <div class="envelope__tag">Una invitación especial para ti</div>
+    <div class="envelope__names">Raymundo &amp; Emilia</div>
+    <div class="envelope__btn">
+      <button class="btn" id="openBtn">Abrir invitación</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reproductor de música (discreto) -->
+<audio id="bgm" loop preload="none">
+  <source src="data:audio/mpeg;base64,__MUSIC_B64__" type="audio/mpeg">
+</audio>
+<button class="music-toggle" id="musicToggle" aria-label="Activar o pausar música">
+  <span class="bars"><i></i><i></i><i></i><i></i></span>
+</button>
+
+<!-- ============================================================
+     01 · PORTADA
+     ============================================================ -->
+<section class="hero" id="portada">
+  <div class="hero__media">
+    <img src="data:image/jpeg;base64,__HERO_B64__" alt="Raymundo y Emilia">
+  </div>
+  <div class="hero__scrim"></div>
+  <div class="hero__content">
+    <div class="hero__eyebrow">Nos casamos</div>
+    <h1 class="hero__names">Raymundo<span class="hero__amp">&amp;</span>Emilia</h1>
+    <div class="hero__date">26 &amp; 27 · Diciembre · 2026</div>
+    <p class="hero__phrase">"Con alegría en nuestros corazones, queremos compartir contigo este momento tan especial."</p>
+  </div>
+  <a href="#intro" class="scrollcue" aria-label="Desplázate para continuar">
+    <span>Desliza</span>
+    <span class="line"></span>
+  </a>
+</section>
+
+<!-- ============================================================
+     02 · INTRODUCCIÓN
+     ============================================================ -->
+<section class="section intro reveal" id="intro">
+  <p class="intro__quote">Hay historias que comienzan con una mirada, se afirman en la calma de lo cotidiano y, sin darse cuenta, se convierten en un para siempre.</p>
+  <div class="divider"><span class="l"></span><span class="d"></span><span class="l"></span></div>
+  <p class="intro__sign">Esta es la nuestra.</p>
+</section>
+
+<!-- ============================================================
+     03 · NUESTRA HISTORIA
+     ============================================================ -->
+<section class="section section-wide historia">
+  <div class="historia__grid">
+    <div class="historia__media reveal">
+      <img src="data:image/jpeg;base64,__BUST_B64__" alt="Raymundo y Emilia">
+    </div>
+    <div class="reveal">
+      <span class="eyebrow">Nuestra historia</span>
+      <h2>Un camino que decidimos<br>recorrer juntos</h2>
+      <p>Hay momentos en la vida que se sienten especiales desde el instante en que suceden. Y hay personas que llegan para quedarse, para compartir sueños, alegrías, aprendizajes y construir juntos un futuro.</p>
+      <p>Hoy, después de recorrer nuestro propio camino, hemos decidido dar uno de los pasos más importantes de nuestras vidas: <strong>unir nuestros caminos para siempre.</strong></p>
+      <p>Queremos celebrar este amor rodeados de nuestras familias, amigos y de todas aquellas personas que han sido parte de nuestra historia. Con la bendición de Dios y acompañados del amor de nuestras familias, tenemos el honor de invitarte a celebrar con nosotros el comienzo de una nueva etapa.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     04 · CUENTA REGRESIVA
+     ============================================================ -->
+<section class="countdown reveal" id="countdown">
+  <span class="eyebrow">Falta muy poco</span>
+  <h2>Nos vemos en...</h2>
+  <div class="countdown__grid">
+    <div><div class="countdown__num" id="cd-days">00</div><div class="countdown__label">Días</div></div>
+    <div><div class="countdown__num" id="cd-hours">00</div><div class="countdown__label">Horas</div></div>
+    <div><div class="countdown__num" id="cd-mins">00</div><div class="countdown__label">Min</div></div>
+    <div><div class="countdown__num" id="cd-secs">00</div><div class="countdown__label">Seg</div></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     05 · EL GRAN DÍA — ceremonia / recepción / baile
+     ============================================================ -->
+<section class="section section-wide evento" id="evento">
+  <div style="text-align:center;">
+    <span class="eyebrow">El gran día</span>
+    <h2 style="font-size:clamp(30px,6vw,42px); margin-top:10px;">Celebremos juntos</h2>
+  </div>
+
+  <div class="evento__item reveal">
+    <svg class="evento__icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.1"><path d="M24 6v8M18 10h12M24 14v8M12 42V26c0-6.6 5.4-12 12-12s12 5.4 12 12v16M8 42h32M16 42v-9M32 42v-9M22 42v-6h4v6"/></svg>
+    <div class="evento__day">Sábado</div>
+    <h3 class="evento__title">Ceremonia religiosa</h3>
+    <div class="evento__time">5:00 de la tarde</div>
+    <div class="evento__place">26 de diciembre · Parroquia de Santiago Apóstol</div>
+    <p class="evento__desc">En este día tan importante para nosotros, queremos recibir la bendición de Dios y comenzar nuestra vida juntos poniendo nuestro amor y nuestro futuro en Sus manos.</p>
+  </div>
+
+  <div class="evento__item reveal">
+    <svg class="evento__icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.1"><path d="M8 40h32M10 40V20l14-10 14 10v20M18 40V26h12v14"/></svg>
+    <div class="evento__day">Domingo</div>
+    <h3 class="evento__title">Recepción</h3>
+    <div class="evento__time">A partir de las 3:00 de la tarde</div>
+    <div class="evento__place">27 de diciembre · Casa de los novios</div>
+    <p class="evento__desc">Queremos recibirte en nuestro hogar para disfrutar de una tarde especial: comida, alegría, música, abrazos y muchos momentos que esperamos recordar toda la vida.</p>
+  </div>
+
+  <div class="evento__item reveal">
+    <svg class="evento__icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.1"><circle cx="24" cy="24" r="16"/><path d="M24 15v9l6 4"/></svg>
+    <div class="evento__day">Y cuando caiga la noche</div>
+    <h3 class="evento__title">Baile &amp; celebración</h3>
+    <div class="evento__time">9:00 de la noche</div>
+    <p class="evento__desc">Porque una boda no estaría completa sin música y mucha alegría. Guarda energía — ¡la fiesta apenas comienza!</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     06 · UBICACIÓN
+     ============================================================ -->
+<section class="section" id="ubicacion">
+  <div style="text-align:center;">
+    <span class="eyebrow">Cómo llegar</span>
+    <h2 style="font-size:clamp(28px,6vw,36px); margin-top:10px;">Ubicación</h2>
+  </div>
+  <div class="lugares">
+    <div class="lugar reveal">
+      <h3>Parroquia de Santiago Apóstol</h3>
+      <p>Ceremonia religiosa · Sábado 26 de diciembre, 5:00 p.m.</p>
+      <!-- TODO: reemplazar con la dirección exacta del templo -->
+      <a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Parroquia+de+Santiago+Ap%C3%B3stol">Cómo llegar</a>
+    </div>
+    <div class="lugar reveal">
+      <h3>Casa de los novios</h3>
+      <p>Recepción &amp; baile · Domingo 27 de diciembre, 3:00 p.m.</p>
+      <!-- TODO: reemplazar con la dirección exacta del domicilio -->
+      <a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Casa+de+los+novios">Cómo llegar</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     07 · DRESS CODE
+     ============================================================ -->
+<section class="section dresscode reveal" id="dresscode">
+  <svg class="dresscode__icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.1"><path d="M24 6c-2 0-3.5 1.6-3.5 3.5S22 13 24 13s3.5-1.6 3.5-3.5S26 6 24 6Z"/><path d="M14 42l3-20 7-5 7 5 3 20"/><path d="M17 22l-7 4 3 6M31 22l7 4-3 6"/></svg>
+  <span class="eyebrow">Código de vestimenta</span>
+  <div class="dresscode__code">Formal / Etiqueta</div>
+  <p class="dresscode__note">Queremos vestirnos de gala para esta noche tan especial. Te pedimos evitar el color blanco, reservado para la novia.</p>
+  <div class="dresscode__row">
+    <div class="dresscode__col">Ellas<b>Vestido largo</b></div>
+    <div class="dresscode__col">Ellos<b>Traje formal</b></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     08 · REFLEXIÓN
+     ============================================================ -->
+<section class="section reflexion reveal">
+  <h2>Un día, dos corazones, una vida</h2>
+  <p>Nuestra boda no representa solamente una celebración. Representa el comienzo de una vida compartida: el compromiso de caminar juntos en los días buenos y en los difíciles, de reír, aprender y crecer juntos, construyendo un hogar lleno de amor.</p>
+  <p>Queremos mirar hacia atrás dentro de muchos años y recordar este día como el momento en que comenzamos oficialmente nuestra historia como esposos. Y nos haría muy felices que tú fueras parte de ese recuerdo.</p>
+</section>
+
+<!-- ============================================================
+     09 · GALERÍA
+     ============================================================ -->
+<section class="section section-wide galeria" id="galeria">
+  <div style="text-align:center; margin-bottom:36px;">
+    <span class="eyebrow">Álbum</span>
+    <h2 style="font-size:clamp(28px,6vw,36px); margin-top:10px;">Momentos nuestros</h2>
+  </div>
+  <div class="galeria__grid">
+    <figure class="galeria__big reveal"><img src="data:image/jpeg;base64,__GAL_FULL_B64__" alt="Raymundo y Emilia"></figure>
+    <div class="galeria__row">
+      <figure class="ph reveal"><img src="data:image/jpeg;base64,__GAL_FACES_B64__" alt="Raymundo y Emilia"></figure>
+      <figure class="ph reveal"><img src="data:image/jpeg;base64,__GAL_HANDS_B64__" alt="Raymundo y Emilia"></figure>
+    </div>
+  </div>
+  <p class="galeria__cap">No olvides tu cámara, tu mejor sonrisa y muchas ganas de celebrar.</p>
+</section>
+
+<!-- ============================================================
+     10 · BRINDIS
+     ============================================================ -->
+<section class="section reflexion reveal">
+  <h2>Brindemos por el amor</h2>
+  <p>Por los caminos que se cruzaron. Por las casualidades que nos llevaron a encontrarnos. Por todo lo vivido y por todo lo que está por venir.</p>
+  <p style="font-family:var(--script); font-style:italic; font-size:20px; color:var(--ink);">¡Salud por nuestro comienzo! 🥂</p>
+</section>
+
+<!-- ============================================================
+     11 · RSVP
+     ============================================================ -->
+<section class="section rsvp" id="rsvp">
+  <span class="eyebrow reveal">Para nosotros, tu presencia es el mejor regalo</span>
+  <h2 class="reveal" style="margin-top:10px;">¿Nos acompañas?</h2>
+  <p class="rsvp__text reveal">Ayúdanos a organizar cada detalle confirmando tu asistencia antes del 1 de diciembre de 2026.</p>
+
+  <form class="form reveal" id="rsvpForm">
+    <div class="field">
+      <label for="rsvpName">Nombre completo</label>
+      <input type="text" id="rsvpName" required placeholder="Tu nombre">
+    </div>
+    <div class="field">
+      <label for="rsvpGuests">Número de acompañantes</label>
+      <input type="number" id="rsvpGuests" min="0" max="10" value="0">
+    </div>
+    <div class="field">
+      <label>¿Asistirás?</label>
+      <div class="radiorow">
+        <label><input type="radio" name="attend" value="Sí, ahí estaré" checked> Sí, ahí estaré</label>
+        <label><input type="radio" name="attend" value="No podré asistir"> No podré asistir</label>
+      </div>
+    </div>
+    <div class="field">
+      <label for="rsvpMsg">Mensaje para los novios (opcional)</label>
+      <textarea id="rsvpMsg" rows="3" placeholder="Escribe unas palabras…"></textarea>
+    </div>
+    <button type="submit" class="btn btn--solid form__submit">Confirmar asistencia</button>
+    <div class="rsvp__note" id="rsvpNote"></div>
+  </form>
+</section>
+
+<!-- ============================================================
+     12 · MESA DE REGALOS
+     ============================================================ -->
+<section class="section regalos reveal">
+  <span class="eyebrow">Mesa de regalos</span>
+  <h2 style="margin-top:10px;">Un detalle opcional</h2>
+  <p>Más que cualquier regalo material, lo que realmente deseamos es compartir nuestra felicidad contigo. Si deseas tener un detalle con nosotros, estas son nuestras opciones:</p>
+  <div class="regalos__row">
+    <!-- TODO: reemplazar con el enlace real de la mesa de regalos -->
+    <a href="#" class="btn">Mesa de regalos</a>
+    <!-- TODO: reemplazar con datos reales para sobre / transferencia -->
+    <a href="#" class="btn">Sobre novios</a>
+  </div>
+</section>
+
+<!-- ============================================================
+     13 · CIERRE
+     ============================================================ -->
+<section class="section cierre reveal">
+  <span class="eyebrow">Con todo nuestro amor</span>
+  <h2 style="color:var(--paper); margin-top:10px; font-size:clamp(26px,5.6vw,34px);">Gracias por ser parte<br>de nuestra historia</h2>
+  <p>Esperamos compartir contigo estos días llenos de emoción, felicidad y amor. Porque los momentos más importantes de la vida se vuelven todavía más especiales cuando se comparten con las personas que amamos.</p>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer>
+  <div class="footer__names">Raymundo &amp; Emilia</div>
+  <div class="footer__date">26 &amp; 27 de Diciembre de 2026</div>
+  <p class="footer__thanks">Gracias por formar parte de nuestra historia.</p>
+  <div class="footer__credit">Dos corazones. Un mismo camino. Una historia para toda la vida.</div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ------------------------------------------------------------
+     CONFIGURACIÓN EDITABLE
+     ------------------------------------------------------------ */
+  var CONFIG = {
+    weddingDate: "2026-12-26T17:00:00", // fecha/hora objetivo de la cuenta regresiva (ceremonia)
+    whatsappNumber: "521XXXXXXXXXX"      // TODO: número real de WhatsApp de los novios (formato: 52 + 10 dígitos)
+  };
+
+  /* ------------------------------------------------------------
+     SOBRE / APERTURA
+     ------------------------------------------------------------ */
+  var envelope = document.getElementById('envelope');
+  var openBtn = document.getElementById('openBtn');
+  var bgm = document.getElementById('bgm');
+
+  openBtn.addEventListener('click', function(){
+    document.body.classList.add('opened');
+    envelope.classList.add('is-closed');
+    setTimeout(function(){ envelope.style.display = 'none'; }, 1200);
+
+    bgm.volume = 0.55;
+    var p = bgm.play();
+    if (p && p.then){
+      p.then(function(){ document.body.classList.add('music-on'); }).catch(function(){ /* autoplay bloqueado: el usuario puede activarla con el botón */ });
+    }
+  }, { once:true });
+
+  /* ------------------------------------------------------------
+     TOGGLE DE MÚSICA
+     ------------------------------------------------------------ */
+  document.getElementById('musicToggle').addEventListener('click', function(){
+    if (bgm.paused){
+      bgm.play().then(function(){ document.body.classList.add('music-on'); }).catch(function(){});
+    } else {
+      bgm.pause();
+      document.body.classList.remove('music-on');
+    }
+  });
+
+  /* ------------------------------------------------------------
+     CUENTA REGRESIVA
+     ------------------------------------------------------------ */
+  var target = new Date(CONFIG.weddingDate).getTime();
+  var elD = document.getElementById('cd-days');
+  var elH = document.getElementById('cd-hours');
+  var elM = document.getElementById('cd-mins');
+  var elS = document.getElementById('cd-secs');
+
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function tick(){
+    var diff = target - Date.now();
+    if (diff < 0) diff = 0;
+    var d = Math.floor(diff/86400000);
+    var h = Math.floor((diff%86400000)/3600000);
+    var m = Math.floor((diff%3600000)/60000);
+    var s = Math.floor((diff%60000)/1000);
+    elD.textContent = pad(d); elH.textContent = pad(h); elM.textContent = pad(m); elS.textContent = pad(s);
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  /* ------------------------------------------------------------
+     SCROLL REVEAL
+     ------------------------------------------------------------ */
+  var revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.16, rootMargin: '0px 0px -60px 0px' });
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('is-visible'); });
+  }
+
+  /* ------------------------------------------------------------
+     BARRA DE PROGRESO
+     ------------------------------------------------------------ */
+  var bar = document.getElementById('progressBar');
+  function onScroll(){
+    var h = document.documentElement;
+    var scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    bar.style.width = scrolled + '%';
+  }
+  document.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+
+  /* ------------------------------------------------------------
+     RSVP → WHATSAPP
+     ------------------------------------------------------------ */
+  var form = document.getElementById('rsvpForm');
+  var note = document.getElementById('rsvpNote');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = document.getElementById('rsvpName').value.trim();
+    var guests = document.getElementById('rsvpGuests').value || '0';
+    var attend = form.querySelector('input[name="attend"]:checked').value;
+    var msg = document.getElementById('rsvpMsg').value.trim();
+
+    if (!name){ note.textContent = 'Por favor escribe tu nombre.'; return; }
+
+    var text = 'Confirmación de asistencia — Boda Raymundo & Emilia%0A'
+      + 'Nombre: ' + encodeURIComponent(name) + '%0A'
+      + 'Asistencia: ' + encodeURIComponent(attend) + '%0A'
+      + 'Acompañantes: ' + encodeURIComponent(guests)
+      + (msg ? ('%0AMensaje: ' + encodeURIComponent(msg)) : '');
+
+    // TODO: si prefieres un backend propio (Formspree, Google Sheets, etc.)
+    // reemplaza este bloque por tu integración; por ahora se envía por WhatsApp.
+    var url = 'https://wa.me/' + CONFIG.whatsappNumber + '?text=' + text;
+    window.open(url, '_blank');
+    note.textContent = '¡Gracias, ' + name + '! Te estaremos esperando.';
+    form.reset();
+  });
+
+})();
+</script>
+</body>
+</html>
